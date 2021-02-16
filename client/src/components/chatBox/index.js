@@ -8,13 +8,7 @@ export default function ChatBox() {
     <div className={styles.chatBoxDiv}>
       <div className={styles.userList}>
         <p>Users</p>
-        <ul>
-          <li>A User</li>
-          <li>A User</li>
-          <li>A User</li>
-          <li>A User</li>
-          <li>A User</li>
-        </ul>
+        <ul></ul>
       </div>
       <div className={styles.messagesDiv}>
         <div className={styles.overlay}>
