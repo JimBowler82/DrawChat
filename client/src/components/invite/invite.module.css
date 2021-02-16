@@ -1,0 +1,25 @@
+.inviteDiv {
+  border: 3px solid #555;
+  width: 600px;
+  padding: 0px 10px;
+  background-color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: -1px 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+.inviteDiv span {
+  width: 20%;
+}
+
+.inviteDiv input[type="text"] {
+  width: 70%;
+  padding: 2px;
+  text-align: center;
+}
+
+.copy {
+  border: 1px solid gray;
+  padding: 3px;
+}

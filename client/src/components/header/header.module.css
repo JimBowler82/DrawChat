@@ -1,0 +1,33 @@
+.header {
+  width: 100%;
+  background-color: dodgerblue;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+  box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.4);
+  margin-bottom: 30px;
+}
+
+.headerContainer {
+  display: flex;
+  width: 80%;
+  justify-content: space-between;
+}
+
+.headerContainer h1 {
+  text-shadow: 0px 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.buttonsDiv {
+  display: flex;
+  width: 190px;
+  justify-content: space-around;
+  align-content: center;
+}
+
+.buttonsDiv button {
+  align-self: center;
+  display: flex;
+  align-items: center;
+}
