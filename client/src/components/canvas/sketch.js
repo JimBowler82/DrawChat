@@ -1,38 +1,70 @@
-export let drawColor = "#ffffff";
+import useSocketContext from "../../context/socketContext";
 
-export let drawSize = "32";
+export default function useSketch() {
+  const [socket] = useSocketContext();
 
-export const setDrawColor = (value) => {
-  drawColor = value;
-};
+  let drawColor = "#ffffff";
 
-export const setDrawSize = (value) => {
-  drawSize = value;
-};
+  let drawSize = "32";
 
-const canvasWidth = 800;
-const canvasHeight = 450;
-
-export const Sketch = (p) => {
-  p.setup = () => {
-    p.createCanvas(canvasWidth, canvasHeight);
-    p.background(51);
+  const setDrawColor = (value) => {
+    drawColor = value;
   };
 
-  p.draw = () => {};
+  const setDrawSize = (value) => {
+    drawSize = value;
+  };
 
-  p.mouseDragged = () => {
-    const data = {
-      x: p.mouseX,
-      y: p.mouseY,
-      color: drawColor,
-      size: drawSize,
+  const canvasWidth = 800;
+  const canvasHeight = 450;
+
+  const Sketch = (p) => {
+    p.setup = () => {
+      p.createCanvas(canvasWidth, canvasHeight);
+      p.background(51);
     };
 
-    console.log("mouse dragged", data);
+    p.draw = () => {};
 
-    p.noStroke();
-    p.fill(drawColor);
-    p.ellipse(p.mouseX, p.mouseY, drawSize, drawSize);
+    p.mouseDragged = () => {
+      if (
+        p.mouseX >= 0 &&
+        p.mouseX <= canvasWidth &&
+        p.mouseY >= 0 &&
+        p.mouseY <= canvasHeight
+      ) {
+        const data = {
+          x: p.mouseX,
+          y: p.mouseY,
+          color: drawColor,
+          size: drawSize,
+        };
+
+        console.log("mouse dragged");
+        socket.emit("mouse", data);
+
+        p.noStroke();
+        p.fill(drawColor);
+        p.ellipse(p.mouseX, p.mouseY, drawSize, drawSize);
+      }
+    };
+
+    p.initialDraw = (data) => {
+      console.log("initial draw");
+      data.forEach((dataObj) => {
+        p.noStroke();
+        p.fill(dataObj.color);
+        p.ellipse(dataObj.x, dataObj.y, dataObj.size, dataObj.size);
+      });
+    };
+
+    p.mouseEvent = (data) => {
+      console.log("mouse event draw");
+      p.noStroke();
+      p.fill(data.color);
+      p.ellipse(data.x, data.y, data.size, data.size);
+    };
   };
-};
+
+  return { drawColor, drawSize, setDrawColor, setDrawSize, Sketch };
+}

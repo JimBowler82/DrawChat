@@ -1,10 +1,18 @@
+import React, { useEffect } from "react";
 import "./App.css";
 import MainPage from "./components/mainPage";
 import ProfilePage from "./components/profilePage";
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import useSocketContext from "./context/socketContext";
 
 function App() {
+  const [socket] = useSocketContext();
+
+  useEffect(() => {
+    return () => socket.close();
+  });
+
   return (
     <>
       <Router>
