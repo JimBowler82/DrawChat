@@ -12,6 +12,8 @@ const cors = require("cors");
 
 app.use(cors());
 
+app.get("/", (req, res) => res.send("Welcome to the DrawChat server"));
+
 let drawingData = [];
 
 io.on("connection", (socket) => {
