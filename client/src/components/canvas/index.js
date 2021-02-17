@@ -2,10 +2,13 @@ import React, { useEffect, useRef, useState } from "react";
 import styles from "./canvas.module.css";
 import p5 from "p5";
 import ToolBar from "../toolBar";
-import { setDrawColor, setDrawSize, Sketch } from "./sketch";
+import useSketch from "./sketch";
+import useSocketContext from "../../context/socketContext";
 
 export default function Canvas() {
   const canvasRef = useRef();
+  const [socket] = useSocketContext();
+  const { Sketch, setDrawColor, setDrawSize } = useSketch();
 
   const downloadDrawing = () => {
     console.log("Download drawing");
@@ -13,6 +16,16 @@ export default function Canvas() {
 
   useEffect(() => {
     let myP5 = new p5(Sketch, canvasRef.current);
+
+    socket.on("initialData", (data) => {
+      console.log("initial data received from server", data);
+      if (data.length > 0) myP5.initialDraw(data);
+    });
+
+    socket.on("mouse", (data) => {
+      console.log("Mouse data received from server", data);
+      myP5.mouseEvent(data);
+    });
 
     return () => {
       myP5.remove();
