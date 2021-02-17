@@ -1,26 +1,14 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./canvas.module.css";
 import p5 from "p5";
+import ToolBar from "../toolBar";
+import { setDrawColor, setDrawSize, Sketch } from "./sketch";
 
 export default function Canvas() {
   const canvasRef = useRef();
 
-  const Sketch = (p) => {
-    p.setup = () => {
-      p.createCanvas(800, 450);
-      p.background(51);
-    };
-
-    p.draw = () => {
-      p.fill(255);
-    };
-
-    p.mouseDragged = () => {
-      console.log("mouse dragged");
-      p.noStroke();
-      p.fill(255);
-      p.ellipse(p.mouseX, p.mouseY, 25, 25);
-    };
+  const downloadDrawing = () => {
+    console.log("Download drawing");
   };
 
   useEffect(() => {
@@ -31,5 +19,13 @@ export default function Canvas() {
     };
   });
 
-  return <div ref={canvasRef} className={styles.canvas}></div>;
+  return (
+    <div ref={canvasRef} className={styles.canvas}>
+      <ToolBar
+        colorFn={setDrawColor}
+        sizeFn={setDrawSize}
+        dwnldFn={downloadDrawing}
+      />
+    </div>
+  );
 }
