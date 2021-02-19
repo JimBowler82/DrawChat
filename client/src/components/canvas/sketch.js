@@ -1,7 +1,9 @@
 import useSocketContext from "../../context/socketContext";
+import { useUserContext } from "../../context/userContext";
 
 export default function useSketch() {
   const [socket] = useSocketContext();
+  const { user } = useUserContext();
 
   let drawColor = "#ffffff";
 
@@ -38,10 +40,11 @@ export default function useSketch() {
           y: p.mouseY,
           color: drawColor,
           size: drawSize,
+          room: user.roomName,
         };
 
         console.log("mouse dragged");
-        socket.emit("mouse", data);
+        socket.emit("mouse", { data, roomName: user.roomName });
 
         p.noStroke();
         p.fill(drawColor);

@@ -26,7 +26,13 @@ io.on("connection", (socket) => {
     console.log(`Socket with id ${socket.id} has joined room ${roomId}`);
 
     // Send room data to socket
-    io.to(socket.id).emit("roomData", { roomId: roomId, data: drawingData });
+    const drawingDataByRoom = drawingData.filter(
+      (dataObj) => dataObj.room === roomId
+    );
+    io.to(socket.id).emit("roomData", {
+      roomId: roomId,
+      data: drawingDataByRoom,
+    });
 
     // Notify other sockets of join
     socket.broadcast.to(roomId).emit("newJoin");
@@ -44,11 +50,11 @@ io.on("connection", (socket) => {
   });
 
   // Receive new drawing input, save to drawingData, send out to all connections.
-  socket.on("mouse", (data) => {
-    console.log("Mouse data received");
+  socket.on("mouse", ({ data, roomName }) => {
+    console.log("Mouse data received", data);
     drawingData.push(data);
 
-    socket.broadcast.emit("mouse", data);
+    socket.broadcast.to(roomName).emit("mouse", data);
   });
 
   // Clear out drawingData on clearCanvas message
@@ -70,4 +76,6 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen("5000", () => console.log("Server running on 5000"));
+httpServer.listen(process.env.PORT || "5000", () =>
+  console.log("Server running on 5000")
+);
