@@ -26,7 +26,7 @@ io.on("connection", (socket) => {
     console.log(`Socket with id ${socket.id} has joined room ${roomId}`);
 
     // Send room data to socket
-    io.to(socket.id).emit("roomData", { room: roomId });
+    io.to(socket.id).emit("roomData", { roomId: roomId, data: drawingData });
 
     // Notify other sockets of join
     socket.broadcast.to(roomId).emit("newJoin");
@@ -43,11 +43,6 @@ io.on("connection", (socket) => {
     io.to(socket.id).emit("roomData", { roomId: newID });
   });
 
-  const data = drawingData;
-
-  // Send initial data to new connections
-  io.to(socket.id).emit("initialData", data);
-
   // Receive new drawing input, save to drawingData, send out to all connections.
   socket.on("mouse", (data) => {
     console.log("Mouse data received");
@@ -61,6 +56,17 @@ io.on("connection", (socket) => {
     console.log("Clearing canvas");
     database = [];
     socket.broadcast.emit("clearCanvas");
+  });
+
+  // Handle socket leaving a room
+  socket.on("leaveRoom", ({ roomId }) => {
+    socket.leave(roomId);
+    console.log(`Socket ${socket.id} has left room ${roomId}`);
+  });
+
+  // Notify of socket disconnect
+  socket.on("disconnect", () => {
+    console.log(`Socket ${socket.id} has disconnected`);
   });
 });
 

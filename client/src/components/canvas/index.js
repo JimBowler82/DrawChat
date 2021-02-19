@@ -5,7 +5,7 @@ import ToolBar from "../toolBar";
 import useSketch from "./sketch";
 import useSocketContext from "../../context/socketContext";
 
-export default function Canvas() {
+export default function Canvas({ initialData }) {
   const canvasRef = useRef();
   const [socket] = useSocketContext();
   const { Sketch, setDrawColor, setDrawSize } = useSketch();
@@ -17,10 +17,7 @@ export default function Canvas() {
   useEffect(() => {
     let myP5 = new p5(Sketch, canvasRef.current);
 
-    socket.on("initialData", (data) => {
-      console.log("initial data received from server", data);
-      if (data.length > 0) myP5.initialDraw(data);
-    });
+    myP5.initialDraw(initialData);
 
     socket.on("mouse", (data) => {
       console.log("Mouse data received from server", data);
