@@ -18,6 +18,7 @@ function App() {
       <Router>
         <Switch>
           <Route path="/profile" component={ProfilePage} />
+          <Route path="/:id" component={MainPage} />
           <Route path="/" component={MainPage} />
         </Switch>
       </Router>

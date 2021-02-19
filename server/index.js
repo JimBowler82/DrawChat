@@ -9,6 +9,7 @@ const options = {
 };
 const io = require("socket.io")(httpServer, options);
 const cors = require("cors");
+const { v4: uuidv4 } = require("uuid");
 
 app.use(cors());
 
@@ -18,6 +19,29 @@ let drawingData = [];
 
 io.on("connection", (socket) => {
   console.log(`New connection: ${socket.id}`);
+
+  // Receive existing room name to join
+  socket.on("joinExistingRoom", ({ roomId }) => {
+    socket.join(roomId);
+    console.log(`Socket with id ${socket.id} has joined room ${roomId}`);
+
+    // Send room data to socket
+    io.to(socket.id).emit("roomData", { room: roomId });
+
+    // Notify other sockets of join
+    socket.broadcast.to(roomId).emit("newJoin");
+  });
+
+  // Receive create new room
+  socket.on("createNewRoom", () => {
+    const newID = uuidv4().substring(0, 8);
+
+    socket.join(newID);
+    console.log(`Socket with id ${socket.id} has joined room ${newID}`);
+
+    // Send room data to socket
+    io.to(socket.id).emit("roomData", { roomId: newID });
+  });
 
   const data = drawingData;
 
