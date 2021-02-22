@@ -80,10 +80,10 @@ io.on("connection", (socket) => {
   });
 
   // Clear out drawingData on clearCanvas message
-  socket.on("clearCanvas", () => {
+  socket.on("clearCanvas", ({ room }) => {
     console.log("Clearing canvas");
-    database = [];
-    socket.broadcast.emit("clearCanvas");
+    drawingData = [];
+    socket.broadcast.to(room).emit("clearCanvas");
   });
 
   // Handle socket leaving a room
@@ -91,7 +91,12 @@ io.on("connection", (socket) => {
     socket.leave(roomId);
     // Update corressponding object in usersArray
     const index = usersArray.findIndex((user) => user.id === socket.id);
-    if (index) usersArray[index].room = "";
+    if (index >= 0) {
+      usersArray[index].room = "";
+      io.to(usersArray[index].room).emit("userLeave", {
+        name: usersArray[index].name,
+      });
+    }
 
     console.log(`Socket ${socket.id} has left room ${roomId}`);
   });
@@ -100,11 +105,17 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     // Update corressponding object in usersArray
     const index = usersArray.findIndex((user) => user.id === socket.id);
-    usersArray = [
-      ...usersArray.slice(0, index),
-      ...usersArray.slice(index + 1),
-    ];
-    console.log(`Socket ${socket.id} has disconnected`, { usersArray });
+    if (index >= 0) {
+      io.to(usersArray[index].room).emit("userLeave", {
+        name: usersArray[index].name,
+      });
+      usersArray = [
+        ...usersArray.slice(0, index),
+        ...usersArray.slice(index + 1),
+      ];
+
+      console.log(`Socket ${socket.id} has disconnected`, { usersArray });
+    }
   });
 
   // CHAT FUNCTIONALITY

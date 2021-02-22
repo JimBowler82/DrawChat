@@ -18,15 +18,31 @@ export default function ChatBox({ userList, setUserList }) {
 
     socket.on("newJoin", handleUserList);
 
+    socket.on("userLeave", handleUserLeave);
+
     return () => {
       socket.off("newJoin", handleUserList);
       socket.off("chatMessage", handleChatMessages);
+      socket.off("userLeave", handleUserLeave);
     };
   }, []);
+
+  function handleUserLeave({ name }) {
+    console.log(`${name} has disconnected`);
+    setUserList((list) => list.filter((user) => user !== name));
+    setChatMessages((messages) => [
+      ...messages,
+      { name: "System", message: `${name} has left!` },
+    ]);
+  }
 
   function handleUserList({ user }) {
     console.log(`${user} joined the chat`);
     setUserList((list) => [...list, user]);
+    setChatMessages((messages) => [
+      ...messages,
+      { name: "System", message: `${user} has joined!` },
+    ]);
   }
 
   function handleChatMessages({ name, message }) {
@@ -104,7 +120,12 @@ export default function ChatBox({ userList, setUserList }) {
         <div className={styles.messages} ref={msgRef}>
           {chatMessages.map((msg, i) => {
             return (
-              <p key={i}>
+              <p
+                key={i}
+                className={
+                  msg.name === "System" ? styles.system : styles.message
+                }
+              >
                 <span>{msg.name === user.name ? "You" : msg.name}:</span>
                 {msg.message}
               </p>

@@ -1,22 +1,27 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import styles from "./canvas.module.css";
 import p5 from "p5";
 import ToolBar from "../toolBar";
 import useSketch from "./sketch";
 import useSocketContext from "../../context/socketContext";
+import { useUserContext } from "../../context/userContext";
 
 export default function Canvas({ initialData }) {
   const canvasRef = useRef();
   const [socket] = useSocketContext();
   const { Sketch, setDrawColor, setDrawSize } = useSketch();
+  const { user } = useUserContext();
   let cnv;
 
   const downloadDrawing = () => {
     cnv.download();
   };
 
-  const clearCanvas = () => {
+  const clearCanvas = (e) => {
     cnv.clearCanvas();
+    if (e) {
+      socket.emit("clearCanvas", { room: user.roomName });
+    }
   };
 
   useEffect(() => {
@@ -25,8 +30,12 @@ export default function Canvas({ initialData }) {
     myP5.initialDraw(initialData);
 
     socket.on("mouse", (data) => {
-      console.log("Mouse data received from server", data);
       myP5.mouseEvent(data);
+    });
+
+    socket.on("clearCanvas", () => {
+      console.log("clear canvas event received");
+      clearCanvas();
     });
 
     return () => {
