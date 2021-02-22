@@ -5,6 +5,8 @@ export default function useSketch() {
   const [socket] = useSocketContext();
   const { user } = useUserContext();
 
+  let canvas;
+
   let drawColor = "#ffffff";
 
   let drawSize = "32";
@@ -22,7 +24,7 @@ export default function useSketch() {
 
   const Sketch = (p) => {
     p.setup = () => {
-      p.createCanvas(canvasWidth, canvasHeight);
+      canvas = p.createCanvas(canvasWidth, canvasHeight);
       p.background(51);
     };
 
@@ -66,6 +68,15 @@ export default function useSketch() {
       p.noStroke();
       p.fill(data.color);
       p.ellipse(data.x, data.y, data.size, data.size);
+    };
+
+    p.download = () => {
+      p.saveCanvas(`Image-${(Math.random() * 10).toString(16)}`, "jpg");
+    };
+
+    p.clearCanvas = () => {
+      p.clear();
+      p.background(51);
     };
   };
 
