@@ -33,7 +33,12 @@ export default function ToolBar({ colorFn, sizeFn, dwnldFn, clear }) {
             </Button>
           </label>
           <label htmlFor="">
-            <Button variant="dark" size="sm" style={{ padding: "0 10px" }}>
+            <Button
+              variant="dark"
+              size="sm"
+              style={{ padding: "0 10px" }}
+              onClick={clear}
+            >
               Clear
             </Button>
           </label>

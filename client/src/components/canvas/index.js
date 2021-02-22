@@ -9,14 +9,19 @@ export default function Canvas({ initialData }) {
   const canvasRef = useRef();
   const [socket] = useSocketContext();
   const { Sketch, setDrawColor, setDrawSize } = useSketch();
+  let cnv;
 
   const downloadDrawing = () => {
-    console.log("Download drawing");
+    cnv.download();
+  };
+
+  const clearCanvas = () => {
+    cnv.clearCanvas();
   };
 
   useEffect(() => {
     let myP5 = new p5(Sketch, canvasRef.current);
-
+    cnv = myP5;
     myP5.initialDraw(initialData);
 
     socket.on("mouse", (data) => {
@@ -35,6 +40,7 @@ export default function Canvas({ initialData }) {
         colorFn={setDrawColor}
         sizeFn={setDrawSize}
         dwnldFn={downloadDrawing}
+        clear={clearCanvas}
       />
     </div>
   );
