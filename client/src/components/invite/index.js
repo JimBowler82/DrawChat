@@ -4,7 +4,7 @@ import { MdContentCopy } from "react-icons/md";
 import { Button, InputGroup, FormControl } from "react-bootstrap";
 
 export default function Invite({ room }) {
-  const base_url = `http://localhost:3000/`;
+  const base_url = process.env.REACT_APP_SERVER_URL;
   const url = base_url + room;
 
   const inputRef = useRef(null);
