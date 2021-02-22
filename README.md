@@ -17,6 +17,12 @@ Project is being built with:
 - Node & Express
 - Firebase (For log in & out authentication)
 
+Features still be implemented:
+
+- Login auth with firebase
+- profile page with saved drawings
+- chat feature
+
 ##### Screenshot
 
 <img src='./screenshot.png' width='600px'>
