@@ -42,6 +42,7 @@
 .messages {
   padding: 20px;
   flex: 8;
+  overflow-y: scroll;
 }
 
 .inputDiv {

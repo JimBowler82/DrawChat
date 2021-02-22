@@ -10,6 +10,7 @@ import { useUserContext } from "../../context/userContext";
 
 export default function MainPage() {
   const [initialDrawingData, setInitialDrawingData] = useState([]);
+  const [roomUsers, setRoomUsers] = useState([]);
   const [roomId, setRoomId] = useState("");
   const [socket] = useSocketContext();
   const { user, setUser } = useUserContext();
@@ -23,12 +24,15 @@ export default function MainPage() {
       socket.emit("createNewRoom");
     }
 
-    socket.on("roomData", ({ roomId, data = [] }) => {
+    socket.on("roomData", ({ roomId, data = [], users = [] }) => {
+      console.log({ users });
       // Add room name to user context.
       console.log("roomData received", roomId);
       setUser({ type: "setRoom", payload: roomId });
       setRoomId(roomId);
       setInitialDrawingData(data);
+      const arr = users.map((user) => user.name);
+      setRoomUsers(arr);
     });
 
     return () => {
@@ -43,7 +47,7 @@ export default function MainPage() {
       <Header />
       <Invite room={roomId} />
       <Canvas initialData={initialDrawingData} />
-      <ChatBox />
+      <ChatBox userList={roomUsers} setUserList={setRoomUsers} />
     </main>
   );
 }
