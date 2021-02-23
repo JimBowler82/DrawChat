@@ -29,14 +29,20 @@ export default function Canvas({ initialData }) {
     cnv = myP5;
     myP5.initialDraw(initialData);
 
+    socket.on("newJoin", () => initialData);
+
     socket.on("mouse", (data) => {
       myP5.mouseEvent(data);
     });
 
-    socket.on("clearCanvas", () => {
-      console.log("clear canvas event received");
-      clearCanvas();
-    });
+    socket.on(
+      "clearCanvas",
+      () => {
+        console.log("clear canvas event received");
+        clearCanvas();
+      },
+      []
+    );
 
     return () => {
       myP5.remove();

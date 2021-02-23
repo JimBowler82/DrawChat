@@ -30,7 +30,9 @@ export default function MainPage() {
       console.log("roomData received", roomId);
       setUser({ type: "setRoom", payload: roomId });
       setRoomId(roomId);
-      setInitialDrawingData(data);
+      setInitialDrawingData((previous) =>
+        data.length === 0 ? previous : data
+      );
       const arr = users.map((user) => user.name);
       setRoomUsers(arr);
     });
