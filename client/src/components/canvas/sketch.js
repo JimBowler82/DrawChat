@@ -64,7 +64,6 @@ export default function useSketch() {
     };
 
     p.mouseEvent = (data) => {
-      console.log("mouse event draw");
       p.noStroke();
       p.fill(data.color);
       p.ellipse(data.x, data.y, data.size, data.size);
