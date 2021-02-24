@@ -3,6 +3,7 @@ import Header from "../header";
 import Invite from "../invite";
 import Canvas from "../canvas";
 import ChatBox from "../chatBox";
+import LoginModal from "../loginModal";
 import styles from "./mainPage.module.css";
 import { useParams } from "react-router-dom";
 import useSocketContext from "../../context/socketContext";
@@ -12,6 +13,7 @@ export default function MainPage() {
   const [initialDrawingData, setInitialDrawingData] = useState([]);
   const [roomUsers, setRoomUsers] = useState([]);
   const [roomId, setRoomId] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
   const [socket] = useSocketContext();
   const { user, setUser } = useUserContext();
   let { id } = useParams();
@@ -46,10 +48,11 @@ export default function MainPage() {
 
   return (
     <main className={styles.main}>
-      <Header />
+      <Header setOpen={() => setIsOpen(true)} />
       <Invite room={roomId} />
       <Canvas initialData={initialDrawingData} />
       <ChatBox userList={roomUsers} setUserList={setRoomUsers} />
+      <LoginModal open={isOpen} close={() => setIsOpen(false)} />
     </main>
   );
 }
