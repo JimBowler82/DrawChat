@@ -1,0 +1,13 @@
+.link {
+  color: dodgerblue;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.closeBtn {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  color: #555;
+  cursor: pointer;
+}

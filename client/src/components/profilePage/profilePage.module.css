@@ -1,0 +1,32 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.main {
+  height: 100vh;
+  background-color: #dbdbd7;
+  margin-top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.containerCard {
+  max-width: 600px;
+  width: 100%;
+  margin-top: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.btnGroup {
+  display: flex;
+  flex-direction: column;
+  margin: 30px 0;
+}
+
+.btnGroup button:nth-child(even) {
+  margin: 10px 0;
+}

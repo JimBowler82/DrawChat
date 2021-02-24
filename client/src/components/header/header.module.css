@@ -26,7 +26,8 @@
   align-content: center;
 }
 
-.buttonsDiv button {
+.buttonsDiv button,
+.navBtn {
   align-self: center;
   display: flex;
   align-items: center;
