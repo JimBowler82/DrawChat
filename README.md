@@ -19,9 +19,8 @@ Project is being built with:
 
 Features still be implemented:
 
-- Login auth with firebase
-- profile page with saved drawings
-- chat feature
+- Saved drawing functionality (Firestore)
+- Password reset
 
 ##### Screenshot
 
